@@ -1,0 +1,46 @@
+// /spotlight/forecastlighting   === les deux tables
+router.post('/spotlight/forecastLighting', postSpotlight = (req, res, next) => {
+   const formBody = req.body;
+
+   connection.query('INSERT INTO program SET ?', [formBody], err => {
+     if(err){
+       res.status(500).json({
+         error: err.message,
+         sql: err.sql
+       });
+     }
+   })
+
+   next();
+
+ }, postForecastLighting = (req2, res2, next) => {
+   const formBody = req2.body;
+
+   connection.query('INSERT INTO forecast_lighting SET ?', [formBody], err2 => {
+     if(err2){
+       res2.status(500).json({
+         error: err2.message,
+         sql: err2.sql
+       });
+     }
+    
+   });
+
+   next();
+
+ }, postProgramForecastLighting = (req3, res3) => {
+   const idProgram = req3.params.idProgram;
+   const idForecast = req3.params.idForecast;
+
+   connection.query('INSERT INTO program_forecast_lighting SET program.id = ? AND forecast_lighting.id = ?', [idProgram, idForecast], err3 => {
+     if(err3){
+       res3.status(500).json({
+         error: err3.message,
+         sql: err3.sql
+       });
+     }
+     else{
+       res3.sendStatus(200);
+     }
+   })
+ });
